@@ -1,1 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Champlain College Events Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #003C5F 0%, #236192 50%, #00A9E0 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+            color: #2d3748;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0, 60, 95, 0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(0, 60, 95, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            color: #003C5F;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .header .tagline {
+            font-size: 1.3rem;
+            color: #236192;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 1rem;
+            color: #718096;
+            opacity: 0.8;
+        }
+
+        .section-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 35px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 60, 95, 0.12);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(0, 60, 95, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .section-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(0, 60, 95, 0.18);
+        }
+
+        .section-title {
+            color: #003C5F;
+            margin-bottom: 25px;
+            font-size: 1.9rem;
+            font-weight: 600;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #74AA50;
+            display: inline-block;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #003C5F;
+            font-size: 0.95rem;
+        }
+
+        input, textarea, select {
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #00A9E0;
+            box-shadow: 0 0 0 3px rgba(0, 169, 224, 0.15);
+            background: white;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #003C5F 0%, #236192 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: none;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(0, 60, 95, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 25px;
+        }
+
+        .event-card {
+            background: white;
+            border-radius: 12px;
+            padding: 28px;
+            box-shadow: 0 8px 25px rgba(0, 60, 95, 0.12);
+            transition: all 0.3s ease;
+            border: 2px solid #f7fafc;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #74AA50 0%, #28724F 100%);
+        }
+
+        .event-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0, 60, 95, 0.18);
+            border-color: #00A9E0;
+        }
+
+        .event-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #003C5F;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .event-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .event-meta span {
+            background: #f0f8ff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #236192;
+            border: 1px solid #e1f2ff;
+            font-weight: 500;
+        }
+
+        .event-description {
+            color: #4a5568;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .event-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .event-category {
+            display: inline-block;
+            background: linear-gradient(135deg, #74AA50 0%, #28724F 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .delete-btn {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: #c53030;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(197, 48, 48, 0.3);
+        }
+
+        .no-events {
+            text-align: center;
+            color: #718096;
+            font-size: 1.2rem;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 12px;
+            border: 2px dashed #e2e8f0;
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #74AA50 0%, #28724F 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+        }
+
+        .champlain-accent {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #00A9E0 0%, #74AA50 100%);
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .header .tagline {
+                font-size: 1.1rem;
+            }
+            
+            .events-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-card {
+                padding: 25px;
+            }
+            
+            .event-footer {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.9rem;
+            }
+            
+            .section-title {
+                font-size: 1.6rem;
+            }
+        }
+
+        .required {
+            color: #e53e3e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="champlain-accent"></div>
+            <h1>Campus Events Portal</h1>
+            <div class="tagline">Ready for Work. Ready for Life. Ready to Make a Difference.</div>
+            <div class="subtitle">Discover and share campus events that connect our Champlain community</div>
+        </div>
+
+        <div class="section-card">
+            <h2 class="section-title">Post a New Event</h2>
+            <div id="successMessage" class="success-message">
+                ✓ Event posted successfully! Your event has been added to the campus calendar.
+            </div>
+            <form id="eventForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="eventTitle">Event Title <span class="required">*</span></label>
+                        <input type="text" id="eventTitle" required placeholder="e.g., Game Development Workshop">
+                    </div>
+                    <div class="form-group">
+                        <label for="eventDate">Date <span class="required">*</span></label>
+                        <input type="date" id="eventDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventTime">Time <span class="required">*</span></label>
+                        <input type="time" id="eventTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventLocation">Location <span class="required">*</span></label>
+                        <input type="text" id="eventLocation" required placeholder="e.g., Miller Information Commons">
+                    </div>
+                    <div class="form-group">
+                        <label for="eventCategory">Category</label>
+                        <select id="eventCategory">
+                            <option value="Academic">Academic</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Business">Business</option>
+                            <option value="Arts & Design">Arts & Design</option>
+                            <option value="Gaming & Esports">Gaming & Esports</option>
+                            <option value="Career Services">Career Services</option>
+                            <option value="Student Life">Student Life</option>
+                            <option value="Campus Recreation">Campus Recreation</option>
+                            <option value="Community Service">Community Service</option>
+                            <option value="Networking">Networking</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventPrice">Cost</label>
+                        <input type="text" id="eventPrice" placeholder="Free, $5 for students, etc.">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="eventDescription">Event Description <span class="required">*</span></label>
+                        <textarea id="eventDescription" required placeholder="Describe what attendees can expect, what they'll learn, and any requirements or materials needed..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventOrganizer">Organizer/Department</label>
+                        <input type="text" id="eventOrganizer" placeholder="e.g., Game Studio, Career Services">
+                    </div>
+                    <div class="form-group">
+                        <label for="eventContact">Contact Information</label>
+                        <input type="text" id="eventContact" placeholder="email@champlain.edu or phone">
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Post Event to Campus Calendar</button>
+            </form>
+        </div>
+
+        <div class="section-card">
+            <h2 class="section-title">Upcoming Campus Events</h2>
+            <div id="eventsContainer" class="events-grid">
+                <div class="no-events">
+                    No events scheduled yet. Be the first to share a campus event!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let events = [];
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+        }
+
+        function formatTime(timeStr) {
+            const [hours, minutes] = timeStr.split(':');
+            const date = new Date();
+            date.setHours(hours, minutes);
+            return date.toLocaleTimeString('en-US', { 
+                hour: 'numeric', 
+                minute: '2-digit',
+                hour12: true 
+            });
+        }
+
+        function showSuccessMessage() {
+            const message = document.getElementById('successMessage');
+            message.style.display = 'block';
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 4000);
+        }
+
+        function renderEvents() {
+            const container = document.getElementById('eventsContainer');
+            
+            if (events.length === 0) {
+                container.innerHTML = '<div class="no-events">No events scheduled yet. Be the first to share a campus event!</div>';
+                return;
+            }
+
+            // Sort events by date and time
+            const sortedEvents = events.sort((a, b) => {
+                const dateA = new Date(a.date + ' ' + a.time);
+                const dateB = new Date(b.date + ' ' + b.time);
+                return dateA - dateB;
+            });
+
+            container.innerHTML = sortedEvents.map((event, index) => `
+                <div class="event-card">
+                    <div class="event-title">${event.title}</div>
+                    <div class="event-meta">
+                        <span>📅 ${formatDate(event.date)}</span>
+                        <span>🕒 ${formatTime(event.time)}</span>
+                        <span>📍 ${event.location}</span>
+                        ${event.price ? `<span>💰 ${event.price}</span>` : ''}
+                        ${event.organizer ? `<span>👥 ${event.organizer}</span>` : ''}
+                    </div>
+                    <div class="event-description">${event.description}</div>
+                    ${event.contact ? `<div style="font-size: 0.9rem; color: #718096; margin-bottom: 15px;"><strong>Contact:</strong> ${event.contact}</div>` : ''}
+                    <div class="event-footer">
+                        <div class="event-category">${event.category}</div>
+                        <button class="delete-btn" onclick="deleteEvent(${index})">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function deleteEvent(index) {
+            if (confirm('Are you sure you want to remove this event from the campus calendar?')) {
+                events.splice(index, 1);
+                renderEvents();
+            }
+        }
+
+        document.getElementById('eventForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newEvent = {
+                title: document.getElementById('eventTitle').value,
+                date: document.getElementById('eventDate').value,
+                time: document.getElementById('eventTime').value,
+                location: document.getElementById('eventLocation').value,
+                category: document.getElementById('eventCategory').value,
+                price: document.getElementById('eventPrice').value,
+                description: document.getElementById('eventDescription').value,
+                organizer: document.getElementById('eventOrganizer').value,
+                contact: document.getElementById('eventContact').value
+            };
+
+            events.push(newEvent);
+            renderEvents();
+            
+            // Reset form
+            this.reset();
+            
+            // Show success message
+            showSuccessMessage();
+            
+            // Scroll to events section
+            document.getElementById('eventsContainer').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        });
+
+        // Set minimum date to today
+        document.getElementById('eventDate').min = new Date().toISOString().split('T')[0];
+
+        // Add some sample events for demonstration
+        window.addEventListener('load', function() {
+            // Uncomment the lines below to add sample events
+            /*
+            events.push({
+                title: "Game Development Workshop",
+                date: "2025-07-25",
+                time: "14:00",
+                location: "Emergent Media Center",
+                category: "Technology",
+                price: "Free",
+                description: "Learn the fundamentals of game development using Unity. Perfect for beginners interested in creating their first game prototype.",
+                organizer: "Game Studio",
+                contact: "gamedev@champlain.edu"
+            });
+            
+            events.push({
+                title: "Career Fair - Tech Companies",
+                date: "2025-07-28",
+                time: "10:00",
+                location: "IDX Student Life Center",
+                category: "Career Services",
+                price: "Free",
+                description: "Meet with representatives from leading technology companies looking to hire Champlain graduates. Bring your resume!",
+                organizer: "Career Services",
+                contact: "careers@champlain.edu"
+            });
+            
+            renderEvents();
+            */
+        });
+    </script>
+</body>
+</html>
